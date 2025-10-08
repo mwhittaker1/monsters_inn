@@ -1,3 +1,73 @@
-[gd_scene format=3 uid="uid://bla7pl27j4trd"]
+[gd_scene load_steps=9 format=3 uid="uid://bla7pl27j4trd"]
 
-[node name="game" type="Node2D"]
+[ext_resource type="Script" uid="uid://dv1oh8fno7a5y" path="res://scripts/AudioManager.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://bij8t8762jeo8" path="res://scripts/Player.gd" id="2_yqjtg"]
+[ext_resource type="Script" uid="uid://dku03teb0bgom" path="res://scripts/EventManager.gd" id="3_p57ef"]
+[ext_resource type="Script" uid="uid://c4flt4sl48pat" path="res://scripts/InventoryManager.gd" id="4_u5sy4"]
+[ext_resource type="Script" uid="uid://c3goydtt83vop" path="res://scripts/TaskManager.gd" id="5_gee14"]
+[ext_resource type="Script" uid="uid://bkyg8w0wc7a8i" path="res://scripts/HUD.gd" id="6_0tnpc"]
+[ext_resource type="Script" uid="uid://cdts3k106mbtk" path="res://scripts/TextBoxManager.gd" id="7_gee14"]
+[ext_resource type="Script" uid="uid://dp6skwu4kg477" path="res://scripts/GameManager.gd" id="8_0tnpc"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_uwrxv")
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(64, 64)
+script = ExtResource("2_yqjtg")
+
+[node name="AudioManager" type="Node" parent="."]
+script = ExtResource("1_uwrxv")
+
+[node name="BGM" type="AudioStreamPlayer2D" parent="AudioManager"]
+
+[node name="SFX" type="AudioStreamPlayer2D" parent="AudioManager"]
+
+[node name="EventManager" type="Node" parent="."]
+script = ExtResource("3_p57ef")
+metadata/_custom_type_script = "uid://dku03teb0bgom"
+
+[node name="InventoryManager" type="Node" parent="."]
+script = ExtResource("4_u5sy4")
+
+[node name="TaskManager" type="Node" parent="."]
+script = ExtResource("5_gee14")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("6_0tnpc")
+
+[node name="Phase" type="Label" parent="UILayer/HUD"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Phase: Check-in"
+
+[node name="TextBox" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_gee14")
+
+[node name="Rooms" type="Node2D" parent="."]
+
+[node name="Room0" type="Node2D" parent="Rooms"]
+
+[node name="Room1" type="Node2D" parent="Rooms"]
+
+[node name="Room2" type="Node2D" parent="Rooms"]
+
+[node name="Monsters" type="Node2D" parent="."]
+
+[node name="MonsterA" type="Node2D" parent="Monsters"]
+
+[node name="MonsterB" type="Node2D" parent="Monsters"]
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("8_0tnpc")

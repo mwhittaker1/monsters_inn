@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://2c5y7rxcov4g"]
+
+[node name="Splash" type="Node2D"]
+
+[node name="BG" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0705882, 0.0745098, 0.101961, 1)
+
+[node name="Title" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "\"Mick N Matt Presents\""
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = " \"Monsters Inn\""
+horizontal_alignment = 1
