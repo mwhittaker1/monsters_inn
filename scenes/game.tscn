@@ -16,7 +16,7 @@ script = ExtResource("1_uwrxv")
 position = Vector2(64, 64)
 script = ExtResource("2_yqjtg")
 
-[node name="AudioManager" type="Node" parent="."]
+[node name="AudioManager" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource("1_uwrxv")
 
 [node name="BGM" type="AudioStreamPlayer2D" parent="AudioManager"]

@@ -1,8 +1,18 @@
-[gd_scene format=3 uid="uid://2c5y7rxcov4g"]
+[gd_scene load_steps=2 format=3 uid="uid://2c5y7rxcov4g"]
 
-[node name="Splash" type="Node2D"]
+[ext_resource type="Script" uid="uid://cjccc7lngmt5r" path="res://scripts/Splash.gd" id="1_y4yub"]
+
+[node name="Splash" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y4yub")
 
 [node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,13 +21,27 @@ grow_vertical = 2
 color = Color(0.0705882, 0.0745098, 0.101961, 1)
 
 [node name="Title" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-text = "\"Mick N Matt Presents\""
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "Mick N Matt 
+Presents"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Subtitle" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-text = " \"Monsters Inn\""
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 80.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " Monsters Inn"
 horizontal_alignment = 1
+vertical_alignment = 1
