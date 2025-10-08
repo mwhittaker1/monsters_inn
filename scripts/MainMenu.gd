@@ -8,6 +8,5 @@ func _ready() -> void:
 		start_btn.pressed.connect(_on_start_pressed)
 
 func _on_start_pressed() -> void:
-	# NOTE: your file is `game.tscn` (lowercase g) in your screenshot.
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
+	get_tree().change_scene_to_file("res://scenes/Game.tscn")
 	print("Start pressed")

@@ -15,6 +15,14 @@ run/main_scene="uid://2c5y7rxcov4g"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+AudioManager="*res://scripts/AudioManager.gd"
+
+[editor]
+
+version_control/main_scene=""
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

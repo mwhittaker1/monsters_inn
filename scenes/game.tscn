@@ -1,37 +1,42 @@
-[gd_scene load_steps=9 format=3 uid="uid://bla7pl27j4trd"]
+[gd_scene load_steps=11 format=3 uid="uid://bla7pl27j4trd"]
 
-[ext_resource type="Script" uid="uid://dv1oh8fno7a5y" path="res://scripts/AudioManager.gd" id="1_uwrxv"]
-[ext_resource type="Script" uid="uid://bij8t8762jeo8" path="res://scripts/Player.gd" id="2_yqjtg"]
-[ext_resource type="Script" uid="uid://dku03teb0bgom" path="res://scripts/EventManager.gd" id="3_p57ef"]
-[ext_resource type="Script" uid="uid://c4flt4sl48pat" path="res://scripts/InventoryManager.gd" id="4_u5sy4"]
-[ext_resource type="Script" uid="uid://c3goydtt83vop" path="res://scripts/TaskManager.gd" id="5_gee14"]
-[ext_resource type="Script" uid="uid://bkyg8w0wc7a8i" path="res://scripts/HUD.gd" id="6_0tnpc"]
-[ext_resource type="Script" uid="uid://cdts3k106mbtk" path="res://scripts/TextBoxManager.gd" id="7_gee14"]
-[ext_resource type="Script" uid="uid://dp6skwu4kg477" path="res://scripts/GameManager.gd" id="8_0tnpc"]
+[ext_resource type="Script" uid="uid://dv1oh8fno7a5y" path="res://scripts/AudioManager.gd" id="1_400sg"]
+[ext_resource type="Script" uid="uid://bij8t8762jeo8" path="res://scripts/Player.gd" id="2_g4kob"]
+[ext_resource type="Script" uid="uid://dp6skwu4kg477" path="res://scripts/GameManager.gd" id="3_qy1jj"]
+[ext_resource type="Script" uid="uid://dku03teb0bgom" path="res://scripts/EventManager.gd" id="4_3xj3m"]
+[ext_resource type="Script" uid="uid://c4flt4sl48pat" path="res://scripts/InventoryManager.gd" id="5_mcffj"]
+[ext_resource type="Script" uid="uid://c3goydtt83vop" path="res://scripts/TaskManager.gd" id="6_2rd6h"]
+[ext_resource type="Script" uid="uid://bkyg8w0wc7a8i" path="res://scripts/HUD.gd" id="7_7ua8r"]
+[ext_resource type="Script" uid="uid://cdts3k106mbtk" path="res://scripts/TextBoxManager.gd" id="8_r7sob"]
+[ext_resource type="Script" uid="uid://bbag0p5mxud0f" path="res://scripts/Room.gd" id="9_qy1jj"]
+[ext_resource type="Script" uid="uid://kc84holhcb8s" path="res://scripts/GuestMonster.gd" id="10_3xj3m"]
 
 [node name="Game" type="Node"]
-script = ExtResource("1_uwrxv")
+script = ExtResource("1_400sg")
 
 [node name="Player" type="Node2D" parent="."]
 position = Vector2(64, 64)
-script = ExtResource("2_yqjtg")
+script = ExtResource("2_g4kob")
 
 [node name="AudioManager" type="AudioStreamPlayer2D" parent="."]
-script = ExtResource("1_uwrxv")
+script = ExtResource("1_400sg")
 
 [node name="BGM" type="AudioStreamPlayer2D" parent="AudioManager"]
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="AudioManager"]
 
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("3_qy1jj")
+
 [node name="EventManager" type="Node" parent="."]
-script = ExtResource("3_p57ef")
+script = ExtResource("4_3xj3m")
 metadata/_custom_type_script = "uid://dku03teb0bgom"
 
 [node name="InventoryManager" type="Node" parent="."]
-script = ExtResource("4_u5sy4")
+script = ExtResource("5_mcffj")
 
 [node name="TaskManager" type="Node" parent="."]
-script = ExtResource("5_gee14")
+script = ExtResource("6_2rd6h")
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 
@@ -40,7 +45,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("6_0tnpc")
+script = ExtResource("7_7ua8r")
 
 [node name="Phase" type="Label" parent="UILayer/HUD"]
 layout_mode = 0
@@ -53,21 +58,23 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("7_gee14")
+script = ExtResource("8_r7sob")
 
 [node name="Rooms" type="Node2D" parent="."]
 
 [node name="Room0" type="Node2D" parent="Rooms"]
+script = ExtResource("9_qy1jj")
 
 [node name="Room1" type="Node2D" parent="Rooms"]
+script = ExtResource("9_qy1jj")
 
 [node name="Room2" type="Node2D" parent="Rooms"]
+script = ExtResource("9_qy1jj")
 
 [node name="Monsters" type="Node2D" parent="."]
 
 [node name="MonsterA" type="Node2D" parent="Monsters"]
+script = ExtResource("10_3xj3m")
 
 [node name="MonsterB" type="Node2D" parent="Monsters"]
-
-[node name="GameManager" type="Node" parent="."]
-script = ExtResource("8_0tnpc")
+script = ExtResource("10_3xj3m")
