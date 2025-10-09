@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://kc84holhcb8s" path="res://scripts/GuestMonster.gd" id="10_3xj3m"]
 
 [node name="Game" type="Node"]
-script = ExtResource("1_400sg")
+script = ExtResource("3_qy1jj")
 
 [node name="Player" type="Node2D" parent="."]
 position = Vector2(64, 64)
@@ -26,7 +26,6 @@ script = ExtResource("1_400sg")
 [node name="SFX" type="AudioStreamPlayer2D" parent="AudioManager"]
 
 [node name="GameManager" type="Node" parent="."]
-script = ExtResource("3_qy1jj")
 
 [node name="EventManager" type="Node" parent="."]
 script = ExtResource("4_3xj3m")
@@ -42,23 +41,41 @@ script = ExtResource("6_2rd6h")
 
 [node name="HUD" type="Control" parent="UILayer"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
 offset_bottom = 40.0
+grow_horizontal = 2
 script = ExtResource("7_7ua8r")
 
 [node name="Phase" type="Label" parent="UILayer/HUD"]
-layout_mode = 0
-offset_right = 40.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -61.0
+offset_right = 61.0
 offset_bottom = 23.0
+grow_horizontal = 2
 text = "Phase: Check-in"
 
 [node name="TextBox" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("8_r7sob")
+
+[node name="Panel" type="Control" parent="TextBox"]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("8_r7sob")
+
+[node name="Text" type="Label" parent="TextBox/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="Rooms" type="Node2D" parent="."]
 

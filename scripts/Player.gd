@@ -20,7 +20,6 @@ func _physics_process(delta: float) -> void:
 			_moving = false
 			return
 	global_position = _from.lerp(_to, _t)
-	return
 
 	var dir := Vector2.ZERO
 	if Input.is_action_just_pressed("ui_up"):
