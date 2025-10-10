@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://crv1bm6ydxi4b"]
+
+[ext_resource type="Texture2D" uid="uid://d2nipleg5s7yt" path="res://assets/images/bell.png" id="1_mxaww"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wg6oa"]
+
+[node name="Bell" type="Node2D"]
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 0
+input_pickable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wg6oa")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mxaww")

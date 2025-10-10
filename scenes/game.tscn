@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://bla7pl27j4trd"]
+[gd_scene load_steps=14 format=3 uid="uid://bla7pl27j4trd"]
 
 [ext_resource type="Script" uid="uid://dv1oh8fno7a5y" path="res://scripts/AudioManager.gd" id="1_400sg"]
 [ext_resource type="Script" uid="uid://bij8t8762jeo8" path="res://scripts/Player.gd" id="2_g4kob"]
+[ext_resource type="Texture2D" uid="uid://ddrddoy66rkn6" path="res://assets/images/pc_front.png" id="3_mcffj"]
 [ext_resource type="Script" uid="uid://dp6skwu4kg477" path="res://scripts/GameManager.gd" id="3_qy1jj"]
 [ext_resource type="Script" uid="uid://dku03teb0bgom" path="res://scripts/EventManager.gd" id="4_3xj3m"]
 [ext_resource type="Script" uid="uid://c4flt4sl48pat" path="res://scripts/InventoryManager.gd" id="5_mcffj"]
@@ -9,14 +10,42 @@
 [ext_resource type="Script" uid="uid://bkyg8w0wc7a8i" path="res://scripts/HUD.gd" id="7_7ua8r"]
 [ext_resource type="Script" uid="uid://cdts3k106mbtk" path="res://scripts/TextBoxManager.gd" id="8_r7sob"]
 [ext_resource type="Script" uid="uid://bbag0p5mxud0f" path="res://scripts/Room.gd" id="9_qy1jj"]
+[ext_resource type="Texture2D" uid="uid://becunpn6qoum2" path="res://assets/images/bg_v1.png" id="10_2rd6h"]
 [ext_resource type="Script" uid="uid://kc84holhcb8s" path="res://scripts/GuestMonster.gd" id="10_3xj3m"]
+[ext_resource type="PackedScene" uid="uid://crv1bm6ydxi4b" path="res://scenes/Bell.tscn" id="13_2rd6h"]
 
 [node name="Game" type="Node"]
 script = ExtResource("3_qy1jj")
 
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("10_2rd6h")
+
+[node name="Rooms" type="Node2D" parent="Background"]
+
+[node name="Room0" type="Node2D" parent="Background/Rooms"]
+script = ExtResource("9_qy1jj")
+
+[node name="Room1" type="Node2D" parent="Background/Rooms"]
+script = ExtResource("9_qy1jj")
+
+[node name="Room2" type="Node2D" parent="Background/Rooms"]
+script = ExtResource("9_qy1jj")
+
 [node name="Player" type="Node2D" parent="."]
 position = Vector2(64, 64)
 script = ExtResource("2_g4kob")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+position = Vector2(-165, -8)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_mcffj")
+
+[node name="Camera2D" type="Camera2D" parent="Player/Sprite2D"]
+zoom = Vector2(1.5, 1.5)
+
+[node name="InteractRay" type="RayCast2D" parent="Player"]
+collide_with_areas = true
+collide_with_bodies = false
 
 [node name="AudioManager" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource("1_400sg")
@@ -77,17 +106,6 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="Rooms" type="Node2D" parent="."]
-
-[node name="Room0" type="Node2D" parent="Rooms"]
-script = ExtResource("9_qy1jj")
-
-[node name="Room1" type="Node2D" parent="Rooms"]
-script = ExtResource("9_qy1jj")
-
-[node name="Room2" type="Node2D" parent="Rooms"]
-script = ExtResource("9_qy1jj")
-
 [node name="Monsters" type="Node2D" parent="."]
 
 [node name="MonsterA" type="Node2D" parent="Monsters"]
@@ -95,3 +113,7 @@ script = ExtResource("10_3xj3m")
 
 [node name="MonsterB" type="Node2D" parent="Monsters"]
 script = ExtResource("10_3xj3m")
+
+[node name="Bell" parent="." instance=ExtResource("13_2rd6h")]
+position = Vector2(-214, 61)
+scale = Vector2(0.05, 0.05)
