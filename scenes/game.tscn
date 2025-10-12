@@ -1,18 +1,59 @@
-[gd_scene load_steps=14 format=3 uid="uid://bla7pl27j4trd"]
+[gd_scene load_steps=19 format=3 uid="uid://bla7pl27j4trd"]
 
 [ext_resource type="Script" uid="uid://dv1oh8fno7a5y" path="res://scripts/AudioManager.gd" id="1_400sg"]
 [ext_resource type="Script" uid="uid://bij8t8762jeo8" path="res://scripts/Player.gd" id="2_g4kob"]
-[ext_resource type="Texture2D" uid="uid://ddrddoy66rkn6" path="res://assets/images/pc_front.png" id="3_mcffj"]
 [ext_resource type="Script" uid="uid://dp6skwu4kg477" path="res://scripts/GameManager.gd" id="3_qy1jj"]
 [ext_resource type="Script" uid="uid://dku03teb0bgom" path="res://scripts/EventManager.gd" id="4_3xj3m"]
 [ext_resource type="Script" uid="uid://c4flt4sl48pat" path="res://scripts/InventoryManager.gd" id="5_mcffj"]
 [ext_resource type="Script" uid="uid://c3goydtt83vop" path="res://scripts/TaskManager.gd" id="6_2rd6h"]
+[ext_resource type="Texture2D" uid="uid://babji75liivfj" path="res://assets/images/PC-bellboy-SpriteSheet.png" id="6_7ua8r"]
 [ext_resource type="Script" uid="uid://bkyg8w0wc7a8i" path="res://scripts/HUD.gd" id="7_7ua8r"]
 [ext_resource type="Script" uid="uid://cdts3k106mbtk" path="res://scripts/TextBoxManager.gd" id="8_r7sob"]
 [ext_resource type="Script" uid="uid://bbag0p5mxud0f" path="res://scripts/Room.gd" id="9_qy1jj"]
 [ext_resource type="Texture2D" uid="uid://becunpn6qoum2" path="res://assets/images/bg_v1.png" id="10_2rd6h"]
 [ext_resource type="Script" uid="uid://kc84holhcb8s" path="res://scripts/GuestMonster.gd" id="10_3xj3m"]
 [ext_resource type="PackedScene" uid="uid://crv1bm6ydxi4b" path="res://scenes/Bell.tscn" id="13_2rd6h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r7sob"]
+atlas = ExtResource("6_7ua8r")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y5y3l"]
+atlas = ExtResource("6_7ua8r")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjgi4"]
+atlas = ExtResource("6_7ua8r")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyk2p"]
+atlas = ExtResource("6_7ua8r")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_45i86"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r7sob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y5y3l")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjgi4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyk2p")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 1.5
+}]
 
 [node name="Game" type="Node"]
 script = ExtResource("3_qy1jj")
@@ -32,20 +73,25 @@ script = ExtResource("9_qy1jj")
 script = ExtResource("9_qy1jj")
 
 [node name="Player" type="Node2D" parent="."]
-position = Vector2(64, 64)
+position = Vector2(34, 71)
 script = ExtResource("2_g4kob")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
-position = Vector2(-165, -8)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_mcffj")
-
-[node name="Camera2D" type="Camera2D" parent="Player/Sprite2D"]
-zoom = Vector2(1.5, 1.5)
-
 [node name="InteractRay" type="RayCast2D" parent="Player"]
+position = Vector2(62, -60)
+target_position = Vector2(0, 117)
+collision_mask = 32
+hit_from_inside = true
 collide_with_areas = true
-collide_with_bodies = false
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Player"]
+sprite_frames = SubResource("SpriteFrames_45i86")
+animation = &"walk"
+frame_progress = 0.74649
+
+[node name="Camera2D" type="Camera2D" parent="Player/Sprite"]
+position = Vector2(-2, -2)
+scale = Vector2(0.25, 0.25)
+zoom = Vector2(1.5, 1.5)
 
 [node name="AudioManager" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource("1_400sg")
@@ -115,5 +161,5 @@ script = ExtResource("10_3xj3m")
 script = ExtResource("10_3xj3m")
 
 [node name="Bell" parent="." instance=ExtResource("13_2rd6h")]
-position = Vector2(-214, 61)
+position = Vector2(-250, 58)
 scale = Vector2(0.05, 0.05)

@@ -1,17 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://crv1bm6ydxi4b"]
+[gd_scene load_steps=4 format=3 uid="uid://crv1bm6ydxi4b"]
 
 [ext_resource type="Texture2D" uid="uid://d2nipleg5s7yt" path="res://assets/images/bell.png" id="1_mxaww"]
+[ext_resource type="Script" uid="uid://coigbcobka8f5" path="res://scripts/Bell.gd" id="1_wg6oa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wg6oa"]
+size = Vector2(1052, 1038)
 
-[node name="Bell" type="Node2D"]
-
-[node name="Area2D" type="Area2D" parent="."]
-collision_layer = 32
+[node name="Bell" type="Area2D"]
+collision_layer = 4294967295
 collision_mask = 0
-input_pickable = false
+script = ExtResource("1_wg6oa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, -6)
 shape = SubResource("RectangleShape2D_wg6oa")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
