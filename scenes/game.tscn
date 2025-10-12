@@ -86,7 +86,7 @@ collide_with_areas = true
 [node name="Sprite" type="AnimatedSprite2D" parent="Player"]
 sprite_frames = SubResource("SpriteFrames_45i86")
 animation = &"walk"
-frame_progress = 0.74649
+frame_progress = 0.902271
 
 [node name="Camera2D" type="Camera2D" parent="Player/Sprite"]
 position = Vector2(-2, -2)

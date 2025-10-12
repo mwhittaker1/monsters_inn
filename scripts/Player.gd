@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var grid_size: int = 32
-@export var step_time: float = 0.12
+@export var step_time: float = 0.30
 @export var faces_right_by_default := false  # true if art faces RIGHT by default
 
 var _facing: Vector2 = Vector2.DOWN
@@ -13,32 +13,46 @@ var _t := 0.0
 @onready var spr: AnimatedSprite2D = get_node_or_null("Sprite") as AnimatedSprite2D
 @onready var _ray: RayCast2D = $InteractRay
 
+var _idle_anim := ""
+var _walk_anim := ""
+
+func _find_anim_case_insensitive(want: String) -> String:
+	if spr == null or spr.sprite_frames == null:
+		return ""
+	for n in spr.sprite_frames.get_animation_names():
+		if n.to_lower() == want.to_lower():
+			return n
+	return ""
+
 func _ready() -> void:
 	if spr == null:
 		push_error("Player: AnimatedSprite2D 'Sprite' not found under Player.")
 		print_tree_pretty()
-		return	
-	var names := spr.sprite_frames.get_animation_names()
-	
-	print("Anim names:", names)
-	
-	if not spr.sprite_frames.has_animation("idle") or not spr.sprite_frames.has_animation("walk"):
-		push_error("Missing 'idle' or 'walk' animations on SpriteFrames.")
-		
-	spr.speed_scale = 1.0
+		return
+
+	_idle_anim = _find_anim_case_insensitive("idle")
+	_walk_anim = _find_anim_case_insensitive("walk")
+	print("Anim names:", spr.sprite_frames.get_animation_names(), " | idle:", _idle_anim, " walk:", _walk_anim)
+	if _idle_anim == "" or _walk_anim == "":
+		push_error("Missing idle/walk animations (any case).")
+
+	# Snap to grid before starting anim
 	_to = _snap_to_grid(global_position)
 	_from = _to
 	global_position = _to
-	spr.play("idle")
-	
-	if spr:
-		# optional: scale first idle frame to grid
-		var tex := spr.sprite_frames.get_frame_texture("idle", 0)
-		if tex:
-			var sz := tex.get_size()
-			if sz.x > 0.0 and sz.y > 0.0:
-				var s := float(grid_size)
-				spr.scale = Vector2(s / sz.x, s / sz.y)
+
+	# Start idle
+	spr.speed_scale = 1.0
+	if _idle_anim != "":
+		spr.play(_idle_anim)
+
+	# Optional: scale first idle frame to grid_size
+	var tex := spr.sprite_frames.get_frame_texture("idle", 0)
+	if tex:
+		var sz := tex.get_size()
+		if sz.x > 0.0 and sz.y > 0.0:
+			var s := float(grid_size)
+			spr.scale = Vector2(s / sz.x, s / sz.y)
 
 func _physics_process(d: float) -> void:
 	# keep ray ~1 tile ahead
@@ -47,11 +61,10 @@ func _physics_process(d: float) -> void:
 
 	if _moving:
 		_t += d / step_time
+		_apply_walk_progress()
 		global_position = _from.lerp(_to, _t)
 		if _t >= 1.0:
-			global_position = _to
-			_moving = false
-			if spr: spr.play("idle")
+			_finish_step()
 		return
 
 func _input(event: InputEvent) -> void:
@@ -59,30 +72,52 @@ func _input(event: InputEvent) -> void:
 		_try_interact()
 
 	var dir := Vector2.ZERO
-	if Input.is_action_just_pressed("ui_up"):
-		dir = Vector2.UP
-	elif Input.is_action_just_pressed("ui_down"):
-		dir = Vector2.DOWN
-	elif Input.is_action_just_pressed("ui_left"):
-		dir = Vector2.LEFT
-	elif Input.is_action_just_pressed("ui_right"):
-		dir = Vector2.RIGHT
+	if Input.is_action_just_pressed("ui_up"):    dir = Vector2.UP
+	elif Input.is_action_just_pressed("ui_down"): dir = Vector2.DOWN
+	elif Input.is_action_just_pressed("ui_left"): dir = Vector2.LEFT
+	elif Input.is_action_just_pressed("ui_right"):dir = Vector2.RIGHT
 
 	if dir != Vector2.ZERO and not _moving:
 		_update_facing(dir)
 		_start_step(dir)
 
 func _start_step(dir: Vector2) -> void:
+	_update_facing(dir)
 	_moving = true
 	_t = 0.0
 	_from = global_position
 	_to = (_from / grid_size).floor() * grid_size + dir * grid_size
-	if spr: spr.play("walk")
-	if dir.x != 0 and spr:
+
+	# begin walk anim; we'll drive frames manually (lockstep)
+	if _walk_anim != "":
+		spr.play(_walk_anim)
+		spr.speed_scale = 0.0  # prevent auto-advancing while we set frames
+
+	# flip only on horizontal moves; vertical keeps last flip
+	if dir.x != 0 and _walk_anim != "":
 		spr.flip_h = (dir.x < 0) if faces_right_by_default else (dir.x > 0)
 
+func _finish_step() -> void:
+	global_position = _to
+	_moving = false
+	_t = 0.0
+	if _idle_anim != "":
+		spr.speed_scale = 1.0
+		spr.play(_idle_anim)
+
+func _apply_walk_progress() -> void:
+	if _walk_anim == "": return
+	var n := spr.sprite_frames.get_frame_count(_walk_anim)
+	if n <= 0: return
+	# progress 0..(n-1) over the step
+	var f := int(floor(min(_t, 0.999) * n)) % n
+	if spr.animation != _walk_anim:
+		spr.play(_walk_anim)
+		spr.speed_scale = 0.0
+	if spr.frame != f:
+		spr.frame = f
+
 func _try_interact() -> void:
-	# brief reach boost so you're not pixel-perfect
 	_ray.target_position = _facing * float(grid_size) * 1.5
 	_ray.force_raycast_update()
 
@@ -92,7 +127,7 @@ func _try_interact() -> void:
 			hit.interact(self)
 			return
 
-	# fallback (optional): nearest interactable in a short cone
+	# optional fallback: nearest interactable in short cone
 	var best: Node = null
 	var best_d := 1e9
 	var p := global_position
