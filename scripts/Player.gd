@@ -47,7 +47,7 @@ func _ready() -> void:
 		spr.play(_idle_anim)
 
 	# Optional: scale first idle frame to grid_size
-	var tex := spr.sprite_frames.get_frame_texture("idle", 0)
+	var tex := spr.sprite_frames.get_frame_texture(_idle_anim, 0)
 	if tex:
 		var sz := tex.get_size()
 		if sz.x > 0.0 and sz.y > 0.0:
