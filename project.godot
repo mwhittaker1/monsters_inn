@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Monsters Inn"
-run/main_scene="uid://2c5y7rxcov4g"
+run/main_scene="uid://bla7pl27j4trd"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
+window/size/viewport_width=960
+window/size/viewport_height=540
 window/stretch/mode="canvas_items"
 
 [editor]

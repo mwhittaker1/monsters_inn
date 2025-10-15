@@ -12,9 +12,26 @@ var _t := 0.0
 
 @onready var spr: AnimatedSprite2D = get_node_or_null("Sprite") as AnimatedSprite2D
 @onready var _ray: RayCast2D = $InteractRay
+@onready var _shape: CollisionShape2D = $CollisionShape2D
 
 var _idle_anim := ""
 var _walk_anim := ""
+
+
+func _debug_probe_here() -> void:
+	var space := get_world_2d().direct_space_state
+	var params := PhysicsPointQueryParameters2D.new()
+	params.position = global_position
+	params.collision_mask = 1
+	params.collide_with_bodies = true
+	params.collide_with_areas = true
+
+	var hits := space.intersect_point(params, 16)
+	if hits.is_empty():
+		print("No colliders detected near player at ", global_position)
+	else:
+		for h in hits:
+			print("Hit:", h.collider, " (", h.collider.name, ")")
 
 func _find_anim_case_insensitive(want: String) -> String:
 	if spr == null or spr.sprite_frames == null:
@@ -68,6 +85,9 @@ func _physics_process(d: float) -> void:
 		return
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_focus_next"):  # Tab by default
+		_debug_probe_here()
+		
 	if event.is_action_pressed("ui_accept"):
 		_try_interact()
 
@@ -83,19 +103,38 @@ func _input(event: InputEvent) -> void:
 
 func _start_step(dir: Vector2) -> void:
 	_update_facing(dir)
+	var from_pos := (_from if _moving else global_position)
+	from_pos = _snap_to_grid(from_pos)
+	var motion := dir * float(grid_size)
+
+	if _would_hit(from_pos + motion):
+		return
+
 	_moving = true
 	_t = 0.0
-	_from = global_position
-	_to = (_from / grid_size).floor() * grid_size + dir * grid_size
+	_from = from_pos
+	_to = from_pos + motion
 
-	# begin walk anim; we'll drive frames manually (lockstep)
 	if _walk_anim != "":
 		spr.play(_walk_anim)
-		spr.speed_scale = 0.0  # prevent auto-advancing while we set frames
+		spr.speed_scale = 0.0 
 
-	# flip only on horizontal moves; vertical keeps last flip
 	if dir.x != 0 and _walk_anim != "":
 		spr.flip_h = (dir.x < 0) if faces_right_by_default else (dir.x > 0)
+
+func _would_hit(target_world_pos: Vector2) -> bool:
+	if _shape == null or _shape.shape == null:
+		return false
+
+	var params := PhysicsShapeQueryParameters2D.new()
+	params.shape = _shape.shape
+	var delta := target_world_pos - global_position
+	params.transform = _shape.global_transform.translated(delta)
+	params.collision_mask = 1 
+	params.exclude = [self]
+
+	var space := get_world_2d().direct_space_state
+	return space.intersect_shape(params, 4).size() > 0
 
 func _finish_step() -> void:
 	global_position = _to

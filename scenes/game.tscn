@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bla7pl27j4trd"]
+[gd_scene load_steps=21 format=3 uid="uid://bla7pl27j4trd"]
 
 [ext_resource type="Script" uid="uid://dv1oh8fno7a5y" path="res://scripts/AudioManager.gd" id="1_400sg"]
 [ext_resource type="Script" uid="uid://bij8t8762jeo8" path="res://scripts/Player.gd" id="2_g4kob"]
@@ -13,6 +13,12 @@
 [ext_resource type="Texture2D" uid="uid://becunpn6qoum2" path="res://assets/images/bg_v1.png" id="10_2rd6h"]
 [ext_resource type="Script" uid="uid://kc84holhcb8s" path="res://scripts/GuestMonster.gd" id="10_3xj3m"]
 [ext_resource type="PackedScene" uid="uid://crv1bm6ydxi4b" path="res://scenes/Bell.tscn" id="13_2rd6h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2rd6h"]
+size = Vector2(104, 68)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7ua8r"]
+height = 28.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r7sob"]
 atlas = ExtResource("6_7ua8r")
@@ -72,9 +78,27 @@ script = ExtResource("9_qy1jj")
 [node name="Room2" type="Node2D" parent="Background/Rooms"]
 script = ExtResource("9_qy1jj")
 
+[node name="Colliders" type="Node2D" parent="."]
+light_mask = 0
+visibility_layer = 0
+
+[node name="FrontDeskBody" type="StaticBody2D" parent="Colliders"]
+position = Vector2(-247, 55)
+collision_mask = 0
+
+[node name="FrontDesk" type="CollisionShape2D" parent="Colliders/FrontDeskBody"]
+position = Vector2(1, 23)
+shape = SubResource("RectangleShape2D_2rd6h")
+debug_color = Color(1.92523e-06, 0.514483, 0.601427, 0.42)
+
 [node name="Player" type="Node2D" parent="."]
+visibility_layer = 2
 position = Vector2(-149, 77)
 script = ExtResource("2_g4kob")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_7ua8r")
 
 [node name="InteractRay" type="RayCast2D" parent="Player"]
 position = Vector2(0, -5)
@@ -90,8 +114,6 @@ frame_progress = 0.146119
 
 [node name="Camera2D" type="Camera2D" parent="Player/Sprite"]
 position = Vector2(-2, -2)
-scale = Vector2(0.25, 0.25)
-zoom = Vector2(1.5, 1.5)
 
 [node name="AudioManager" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource("1_400sg")
