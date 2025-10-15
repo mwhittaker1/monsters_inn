@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://crv1bm6ydxi4b" path="res://scenes/Bell.tscn" id="13_2rd6h"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2rd6h"]
-size = Vector2(104, 68)
+size = Vector2(88, 53)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7ua8r"]
 height = 28.0
@@ -87,7 +87,7 @@ position = Vector2(-247, 55)
 collision_mask = 0
 
 [node name="FrontDesk" type="CollisionShape2D" parent="Colliders/FrontDeskBody"]
-position = Vector2(1, 23)
+position = Vector2(-2, 28)
 shape = SubResource("RectangleShape2D_2rd6h")
 debug_color = Color(1.92523e-06, 0.514483, 0.601427, 0.42)
 

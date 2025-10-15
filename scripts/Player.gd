@@ -88,7 +88,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_focus_next"):  # Tab by default
 		_debug_probe_here()
 		
-	if event.is_action_pressed("ui_accept"):
+	if event.is_action_pressed("ui_interact"):
 		_try_interact()
 
 	var dir := Vector2.ZERO
