@@ -4,6 +4,7 @@ extends Node2D
 @export var step_time: float = 0.30
 @export var faces_right_by_default := false  # true if art faces RIGHT by default
 
+var _last_prompt_target: Node = null
 var _facing: Vector2 = Vector2.DOWN
 var _moving := false
 var _from: Vector2
@@ -83,7 +84,30 @@ func _physics_process(d: float) -> void:
 		if _t >= 1.0:
 			_finish_step()
 		return
+		
+	var hit: Object = _ray.get_collider() if _ray.is_colliding() else null
 
+	if hit != null and hit is Node and (hit as Node).is_in_group("interactable"):
+		if hit != _last_prompt_target:
+			_last_prompt_target = hit
+			var world_pos: Vector2 = _ray.get_collision_point()
+			_get_prompt_ui().show_prompt("Press E", world_pos, 1.2)
+	else:
+		if _last_prompt_target != null:
+			_last_prompt_target = null
+			_get_prompt_ui().cancel_prompt()
+
+	if Input.is_action_just_pressed("ui_accept") and hit != null and hit is Node and (hit as Node).is_in_group("interactable"):
+		_get_prompt_ui().cancel_prompt()
+		(hit as Node).call_deferred("on_interact")  # we’ll implement this on the Desk next step
+
+
+func _get_prompt_ui() -> Node:
+	var n: Node = get_tree().get_first_node_in_group("PromptUI")
+	if n != null:
+		return n
+	return get_node("/root/Game/UI/PromptUI")
+		
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_focus_next"):  # Tab by default
 		_debug_probe_here()
@@ -170,7 +194,7 @@ func _try_interact() -> void:
 	var best: Node = null
 	var best_d := 1e9
 	var p := global_position
-	for n in get_tree().get_nodes_in_group("interactables"):
+	for n in get_tree().get_nodes_in_group("interactable"):
 		if not n is Node2D: continue
 		var to := (n as Node2D).global_position - p
 		if to.dot(_facing) <= 0: continue

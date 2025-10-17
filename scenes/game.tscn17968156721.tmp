@@ -94,7 +94,7 @@ collision_mask = 0
 position = Vector2(-5.5, -135.75)
 shape = SubResource("RectangleShape2D_kvuet")
 
-[node name="FrontDeskBody" type="StaticBody2D" parent="." groups=["Interactable"]]
+[node name="FrontDeskBody" type="StaticBody2D" parent="."]
 position = Vector2(-241, 61)
 collision_mask = 0
 
@@ -179,7 +179,7 @@ script = ExtResource("10_3xj3m")
 position = Vector2(8, -1)
 script = ExtResource("10_3xj3m")
 
-[node name="Bell" parent="." groups=["Interactable"] instance=ExtResource("13_2rd6h")]
+[node name="Bell" parent="." instance=ExtResource("13_2rd6h")]
 z_index = 1
 position = Vector2(-210, 62)
 scale = Vector2(0.05, 0.05)
