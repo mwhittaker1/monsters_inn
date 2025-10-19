@@ -86,18 +86,32 @@ func _physics_process(d: float) -> void:
 		return
 		
 	var hit: Object = _ray.get_collider() if _ray.is_colliding() else null
-
-	if hit != null and hit is Node and (hit as Node).is_in_group("Interactable"):
-		if hit != _last_prompt_target:
-			_last_prompt_target = hit
-			var world_pos: Vector2 = _ray.get_collision_point()
-			_get_prompt_ui().show_prompt("Press E", world_pos, 1.2)
+	var is_interactable := hit != null and hit is Node and (hit as Node).is_in_group("Interactable")
+	var ui = _get_prompt_ui() 
+	
+	if ui == null: # Exit early if UI isn't found
+		return
+		
+	if is_interactable:
+		var current_target = hit as Node2D
+		var target_pos: Vector2 = current_target.global_position
+		var offset: Vector2 = Vector2(0, -32) # Offset to place above the object
+		var final_world_pos: Vector2 = target_pos + offset
+		
+		if current_target != _last_prompt_target:
+			# New target hit: show prompt
+			_last_prompt_target = current_target
+			ui.show_prompt("Press E to interact", final_world_pos, 1.2)
+		else:
+			# Same target hit: refresh position
+			ui.refresh_position(final_world_pos)
 	else:
+		# Nothing hit: hide prompt
 		if _last_prompt_target != null:
 			_last_prompt_target = null
-			_get_prompt_ui().cancel_prompt()
+			ui.cancel_prompt()
 
-	if Input.is_action_just_pressed("ui_accept") and hit is Node and (hit as Node).is_in_group("interactable"):
+	if Input.is_action_just_pressed("ui_accept") and hit is Node and (hit as Node).is_in_group("Interactable"):
 		_get_prompt_ui().cancel_prompt()
 		var n := hit as Node
 		if n.has_method("interact"):
@@ -105,9 +119,11 @@ func _physics_process(d: float) -> void:
 
 func _get_prompt_ui() -> Node:
 	var n: Node = get_tree().get_first_node_in_group("PromptUI")
-	if n != null:
-		return n
-	return get_node("/root/Game/UI/PromptUI")
+	if n == null:
+		# Use 'assert' to immediately stop the game and show an error 
+		# if the crucial PromptUI node is missing from its group.
+		assert(false, "FATAL ERROR: PromptUI not found in group 'PromptUI'. Check scene setup and group name (case-sensitive).")
+	return n
 		
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_focus_next"):  # Tab by default
@@ -195,7 +211,7 @@ func _try_interact() -> void:
 	var best: Node = null
 	var best_d := 1e9
 	var p := global_position
-	for n in get_tree().get_nodes_in_group("interactable"):
+	for n in get_tree().get_nodes_in_group("Interactable"):
 		if not n is Node2D: continue
 		var to := (n as Node2D).global_position - p
 		if to.dot(_facing) <= 0: continue

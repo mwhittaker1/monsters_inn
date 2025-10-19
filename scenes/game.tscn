@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://becunpn6qoum2" path="res://assets/images/bg_v1.png" id="10_2rd6h"]
 [ext_resource type="Script" uid="uid://kc84holhcb8s" path="res://scripts/GuestMonster.gd" id="10_3xj3m"]
 [ext_resource type="PackedScene" uid="uid://crv1bm6ydxi4b" path="res://scenes/Bell.tscn" id="13_2rd6h"]
-[ext_resource type="Script" path="res://scripts/PromptUI.gd" id="14_trtic"]
+[ext_resource type="Script" uid="uid://b5luq1knukdp7" path="res://scripts/PromptUI.gd" id="14_trtic"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kvuet"]
 size = Vector2(957, 261.5)
