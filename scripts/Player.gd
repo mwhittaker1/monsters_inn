@@ -87,7 +87,7 @@ func _physics_process(d: float) -> void:
 		
 	var hit: Object = _ray.get_collider() if _ray.is_colliding() else null
 
-	if hit != null and hit is Node and (hit as Node).is_in_group("interactable"):
+	if hit != null and hit is Node and (hit as Node).is_in_group("Interactable"):
 		if hit != _last_prompt_target:
 			_last_prompt_target = hit
 			var world_pos: Vector2 = _ray.get_collision_point()
@@ -97,10 +97,11 @@ func _physics_process(d: float) -> void:
 			_last_prompt_target = null
 			_get_prompt_ui().cancel_prompt()
 
-	if Input.is_action_just_pressed("ui_accept") and hit != null and hit is Node and (hit as Node).is_in_group("interactable"):
+	if Input.is_action_just_pressed("ui_accept") and hit is Node and (hit as Node).is_in_group("interactable"):
 		_get_prompt_ui().cancel_prompt()
-		(hit as Node).call_deferred("on_interact")  # we’ll implement this on the Desk next step
-
+		var n := hit as Node
+		if n.has_method("interact"):
+			n.call_deferred("interact", self)
 
 func _get_prompt_ui() -> Node:
 	var n: Node = get_tree().get_first_node_in_group("PromptUI")
