@@ -83,27 +83,27 @@ func _physics_process(d: float) -> void:
 		global_position = _from.lerp(_to, _t)
 		if _t >= 1.0:
 			_finish_step()
-		return
 		
 	var hit: Object = _ray.get_collider() if _ray.is_colliding() else null
 	var is_interactable := hit != null and hit is Node and (hit as Node).is_in_group("Interactable")
 	var ui = _get_prompt_ui() 
-	
-	if ui == null: # Exit early if UI isn't found
-		return
 		
 	if is_interactable:
+		print("DEBUG: is_interactable was found")
 		var current_target = hit as Node2D
 		var target_pos: Vector2 = current_target.global_position
 		var offset: Vector2 = Vector2(0, -32) # Offset to place above the object
 		var final_world_pos: Vector2 = target_pos + offset
-		
+		print("DEBUG: Checking variables for show_prompt. current_target: ", current_target)
 		if current_target != _last_prompt_target:
 			# New target hit: show prompt
 			_last_prompt_target = current_target
+			print("DEBUG: Checking variables for show_prompt. current_target: ", current_target) 
+			print("DEBUG: last_prompt_target: ", _last_prompt_target)
 			ui.show_prompt("Press E to interact", final_world_pos, 1.2)
 		else:
 			# Same target hit: refresh position
+			print("DEBUG: exiting promptui loop without showing prompt.")
 			ui.refresh_position(final_world_pos)
 	else:
 		# Nothing hit: hide prompt
@@ -112,7 +112,7 @@ func _physics_process(d: float) -> void:
 			ui.cancel_prompt()
 
 	if Input.is_action_just_pressed("ui_accept") and hit is Node and (hit as Node).is_in_group("Interactable"):
-		_get_prompt_ui().cancel_prompt()
+		_get_prompt_ui().cancel_prompt() #hide prompt when interact is hit
 		var n := hit as Node
 		if n.has_method("interact"):
 			n.call_deferred("interact", self)
@@ -202,8 +202,10 @@ func _try_interact() -> void:
 	_ray.force_raycast_update()
 
 	if _ray.is_colliding():
+		print("DEBUG: ray.is_colliding found object")
 		var hit := _ray.get_collider()
 		if hit and hit.has_method("interact"):
+			print("DEBUG: interact object found by ray.is_colliding")
 			hit.interact(self)
 			return
 

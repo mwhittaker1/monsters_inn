@@ -26,16 +26,20 @@ func _notification(what: int) -> void:
 func _process(_dt: float) -> void:
 	if not _is_active:
 		return
-		
+
+	var to_screen: Transform2D
 	if _camera != null:
-		var screen_pos: Vector2 = get_viewport().get_final_transform() * _follow_world_pos
-		
-		var sz: Vector2 = get_combined_minimum_size()
-		position = screen_pos - sz * 0.5 + Vector2(0.0, y_offset) + extra_offset
-		
-	# timeout
+		to_screen = _camera.get_canvas_transform().affine_inverse()
+	else:
+		to_screen = get_viewport().get_canvas_transform().affine_inverse()
+
+	var screen_pos: Vector2 = to_screen * _follow_world_pos
+	var sz: Vector2 = get_combined_minimum_size()
+	position = screen_pos - sz * 0.5 + Vector2(0.0, y_offset) + extra_offset
+
 	if _visible_until_ms >= 0 and Time.get_ticks_msec() >= _visible_until_ms:
 		_hide_prompt()
+
 
 func show_prompt(text: String, world_pos: Vector2, seconds: float = -1.0) -> void:
 	_refresh_camera()
@@ -47,7 +51,7 @@ func show_prompt(text: String, world_pos: Vector2, seconds: float = -1.0) -> voi
 	modulate.a = 1.0
 
 	var dur := (seconds if seconds > 0.0 else default_seconds)
-	_visible_until_ms = Time.get_ticks_msec() + int(dur * 5000.0)
+	_visible_until_ms = Time.get_ticks_msec() + int(dur * 1000.0)
 
 func refresh_position(world_pos: Vector2) -> void:
 	_follow_world_pos = world_pos
