@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Monsters Inn"
-run/main_scene="uid://bla7pl27j4trd"
+run/main_scene="uid://b4plpoi6jjeav"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 

@@ -15,12 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://crv1bm6ydxi4b" path="res://scenes/Bell.tscn" id="13_2rd6h"]
 [ext_resource type="Script" uid="uid://b5luq1knukdp7" path="res://scripts/PromptUI.gd" id="14_trtic"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kvuet"]
-size = Vector2(957, 261.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2rd6h"]
-size = Vector2(80, 29.25)
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7ua8r"]
 height = 28.0
 
@@ -65,12 +59,86 @@ animations = [{
 "speed": 1.5
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kvuet"]
+size = Vector2(957, 261.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2rd6h"]
+size = Vector2(80, 29.25)
+
 [node name="Game" type="Node"]
 script = ExtResource("3_qy1jj")
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(4, 4)
 texture = ExtResource("10_2rd6h")
+
+[node name="Player" type="Node2D" parent="Background"]
+visibility_layer = 2
+position = Vector2(-153, 73)
+script = ExtResource("2_g4kob")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Player"]
+position = Vector2(-1, 13)
+shape = SubResource("CapsuleShape2D_7ua8r")
+
+[node name="InteractRay" type="RayCast2D" parent="Background/Player"]
+position = Vector2(0, -5)
+target_position = Vector2(-1, 69)
+collision_mask = 32
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Background/Player"]
+position = Vector2(-1, 9)
+sprite_frames = SubResource("SpriteFrames_45i86")
+animation = &"walk"
+frame_progress = 0.146119
+
+[node name="Camera2D" type="Camera2D" parent="Background/Player/Sprite"]
+position = Vector2(-3, -2)
+
+[node name="Bell" parent="Background" groups=["Interactable"] instance=ExtResource("13_2rd6h")]
+z_index = 2
+position = Vector2(-214, 58)
+scale = Vector2(0.05, 0.05)
+
+[node name="Colliders" type="Node2D" parent="Background"]
+light_mask = 0
+visibility_layer = 0
+position = Vector2(-4, -4)
+
+[node name="SignBody" type="StaticBody2D" parent="Background/Colliders"]
+collision_mask = 0
+
+[node name="Sign" type="CollisionShape2D" parent="Background/Colliders/SignBody"]
+position = Vector2(-5.5, -135.75)
+shape = SubResource("RectangleShape2D_kvuet")
+
+[node name="Monsters" type="Node2D" parent="Background"]
+position = Vector2(-4, -4)
+
+[node name="MonsterA" type="Node2D" parent="Background/Monsters"]
+script = ExtResource("10_3xj3m")
+
+[node name="MonsterB" type="Node2D" parent="Background/Monsters"]
+position = Vector2(8, -1)
+script = ExtResource("10_3xj3m")
+
+[node name="FrontDeskBody" type="StaticBody2D" parent="Background" groups=["Interactable"]]
+position = Vector2(-245, 57)
+collision_mask = 0
+
+[node name="SpriteDesk" type="Sprite2D" parent="Background/FrontDeskBody"]
+z_index = 1
+position = Vector2(-3.5, 18.75)
+scale = Vector2(0.220588, 0.290441)
+texture = ExtResource("4_trtic")
+
+[node name="FrontDesk" type="CollisionShape2D" parent="Background/FrontDeskBody"]
+visibility_layer = 3
+position = Vector2(-5, 33.625)
+shape = SubResource("RectangleShape2D_2rd6h")
+debug_color = Color(1.92523e-06, 0.514483, 0.601427, 0.42)
 
 [node name="Rooms" type="Node2D" parent="Background"]
 
@@ -83,106 +151,12 @@ script = ExtResource("9_qy1jj")
 [node name="Room2" type="Node2D" parent="Background/Rooms"]
 script = ExtResource("9_qy1jj")
 
-[node name="Colliders" type="Node2D" parent="."]
-light_mask = 0
-visibility_layer = 0
-
-[node name="SignBody" type="StaticBody2D" parent="Colliders"]
-collision_mask = 0
-
-[node name="Sign" type="CollisionShape2D" parent="Colliders/SignBody"]
-position = Vector2(-5.5, -135.75)
-shape = SubResource("RectangleShape2D_kvuet")
-
-[node name="FrontDeskBody" type="StaticBody2D" parent="." groups=["Interactable"]]
-position = Vector2(-241, 61)
-collision_mask = 0
-
-[node name="SpriteDesk" type="Sprite2D" parent="FrontDeskBody"]
-z_index = 1
-position = Vector2(-3.5, 18.75)
-scale = Vector2(0.220588, 0.290441)
-texture = ExtResource("4_trtic")
-
-[node name="FrontDesk" type="CollisionShape2D" parent="FrontDeskBody"]
-visibility_layer = 3
-position = Vector2(-5, 33.625)
-shape = SubResource("RectangleShape2D_2rd6h")
-debug_color = Color(1.92523e-06, 0.514483, 0.601427, 0.42)
-
-[node name="Player" type="Node2D" parent="."]
-visibility_layer = 2
-position = Vector2(-149, 77)
-script = ExtResource("2_g4kob")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2(-1, 13)
-shape = SubResource("CapsuleShape2D_7ua8r")
-
-[node name="InteractRay" type="RayCast2D" parent="Player"]
-position = Vector2(0, -5)
-target_position = Vector2(-1, 69)
-collision_mask = 32
-hit_from_inside = true
-collide_with_areas = true
-
-[node name="Sprite" type="AnimatedSprite2D" parent="Player"]
-position = Vector2(-1, 9)
-sprite_frames = SubResource("SpriteFrames_45i86")
-animation = &"walk"
-frame_progress = 0.146119
-
-[node name="Camera2D" type="Camera2D" parent="Player/Sprite"]
-position = Vector2(-3, -2)
-
 [node name="AudioManager" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource("1_400sg")
 
 [node name="BGM" type="AudioStreamPlayer2D" parent="AudioManager"]
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="AudioManager"]
-
-[node name="GameManager" type="Node" parent="."]
-
-[node name="EventManager" type="Node" parent="."]
-script = ExtResource("4_3xj3m")
-metadata/_custom_type_script = "uid://dku03teb0bgom"
-
-[node name="InventoryManager" type="Node" parent="."]
-script = ExtResource("5_mcffj")
-
-[node name="TaskManager" type="Node" parent="."]
-script = ExtResource("6_2rd6h")
-
-[node name="TextBox" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-script = ExtResource("8_r7sob")
-
-[node name="Panel" type="Control" parent="TextBox"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Text" type="Label" parent="TextBox/Panel"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="Monsters" type="Node2D" parent="."]
-
-[node name="MonsterA" type="Node2D" parent="Monsters"]
-script = ExtResource("10_3xj3m")
-
-[node name="MonsterB" type="Node2D" parent="Monsters"]
-position = Vector2(8, -1)
-script = ExtResource("10_3xj3m")
-
-[node name="Bell" parent="." groups=["Interactable"] instance=ExtResource("13_2rd6h")]
-z_index = 1
-position = Vector2(-210, 62)
-scale = Vector2(0.05, 0.05)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -232,3 +206,31 @@ layout_mode = 2
 
 [node name="Button2" type="Button" parent="UI/Control/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+
+[node name="TextBox" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("8_r7sob")
+
+[node name="Panel" type="Control" parent="UI/TextBox"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Text" type="Label" parent="UI/TextBox/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="GameManager" type="Node" parent="."]
+
+[node name="EventManager" type="Node" parent="."]
+script = ExtResource("4_3xj3m")
+metadata/_custom_type_script = "uid://dku03teb0bgom"
+
+[node name="InventoryManager" type="Node" parent="."]
+script = ExtResource("5_mcffj")
+
+[node name="TaskManager" type="Node" parent="."]
+script = ExtResource("6_2rd6h")
